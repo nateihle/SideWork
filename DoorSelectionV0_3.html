@@ -211,15 +211,29 @@ function frameTypeChanged()
 	doorWidthChanged();
 }
 
+function getFootString(inches)
+{
+	var ft = Math.floor(inches / 12);
+	var str = "";
+	var rem_inches = inches - (ft * 12)
+	if(ft > 0)
+	{
+		str += ft + "\' " + Math.floor(rem_inches) + "\"";
+	}
+	return str;
+}
+
 function doorWidthChanged()
 {
 	var i = document.getElementById("numDoors").selectedIndex;
 	var j = document.getElementById("frameConfig").selectedIndex;
+	var k = document.getElementById("doorWidth").selectedIndex;
 	var numFrames = DoorInfo[i][1][j][0];
 	var numDoors = i + 1;
-	var totalWidth = (568 * numDoors) + (35 * (numDoors + 1)) + (30 * (numFrames - 1));
+	var base = 568 + (k>0?81:0) + (k>1?51:0) + (k>2?38:0) + (k>3?67:0) + (k>4?74:0);
+	var totalWidth = (base * numDoors) + (35 * (numDoors + 1)) + (30 * (numFrames - 1));
 	var totalWidthInches = totalWidth / 25.4;
-	changeDivStr("totalWidth", totalWidth + "mm " + totalWidthInches.toFixed(2) + "\"");
+	changeDivStr("totalWidth", totalWidth + "mm " + getFootString(totalWidthInches));
 }
 
 </script>

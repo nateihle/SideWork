@@ -4,41 +4,85 @@
 <meta charset="UTF-8">
 <title>HTML5 CSS Easy Drop Menu System</title>
 <style>
-
+body{ margin:0px; }
+#leftMenu {
+	width: 15%;
+	min-width: 150px;
+}
+#leftMenu > details{
+    
+}
+#leftMenu > details > summary{
+	cursor:pointer;
+	background: #DFEFFF;
+	margin:6px;
+	padding:8px;
+}
+#leftMenu > details > summary:hover{
+	background: #EFEFEF;
+}
+#leftMenu > details > summary::-webkit-details-marker{
+	/*display: none;*/
+}
+#leftMenu > details > a{
+	display:block;
+	text-decoration: none;
+	color:#160077;
+	font-size:13px;
+	margin:3px 6px 3px 18px;
+	padding: 4px;
+	background: #EFEFEF;
+}
+#leftMenu > details > a:hover{
+	background: #DFEFFF;
+	font-weight: bold;
+}
+#leftMenu > details > a:before{
+	content: "- ";
+}
 </style>
 </head>
 <body onload="main()">
-<div>
-  <table>
-	<th width="50" style="text-align:left">
+<div id="leftMenu">
+  <table style="width:400%" border="1">
+	<th>
+	  <p>Number of Doors</p>
 	  <select id="numDoors" onchange="numDoorsChanged()">
 	  </select>
 	</th>
-	<th width="75" style="text-align:left">
+	<th>
+		<p>Number of Frames</p>
 	  <div id="numFrames">
 	  </div>
 	</th>
-	<th width="30" style="text-align:left">
+	<th>
+		<p>Door to Frame</p>
 	  <select id="frameConfig" onchange="frameTypeChanged()">
 	  </select>
 	</th>
-	<th width="150" style="text-align:left">
+	<th>
+		<p>Frame Types</p>
 	  <div id="frameString">
 	  </div>
 	</th>
-	<th width="75" style="text-align:left">
-	  <select id="doorHeight">
-	  </select>
-	</th>
-	<th width="75" style="text-align:left">
+	<th>
+		<p>Catalog Door Width</p>
 	  <select id="doorWidth" onchange="doorWidthChanged()">
 	  </select>
 	</th>
-	<th width="150" style="text-align:left">
-	  <div id="totalWidth">
+	<th>
+		<p>Door Height</p>
+	  <select id="doorHeight">
+	  </select>
+	</th>
+	<th>
+		<p>Net Opening</p>
+	  <div style="background-color:#9ACD32" id="totalWidth">
 	  </div>
 	</th>
   </table>
+  <div id="visualSetup">
+  </div>
 </div>
 <script>
 
@@ -183,7 +227,7 @@ function getFootString(inches)
 	var rem_inches = inches - (ft * 12)
 	if(ft > 0)
 	{
-		str += ft + "\' " + Math.floor(rem_inches) + "\"";
+		str += ft + " FT " + Math.floor(rem_inches) + " INCHES";
 	}
 	return str;
 }
@@ -198,7 +242,22 @@ function doorWidthChanged()
 	var base = 568 + (k>0?81:0) + (k>1?51:0) + (k>2?38:0) + (k>3?67:0) + (k>4?74:0);
 	var totalWidth = (base * numDoors) + (35 * (numDoors + 1)) + (30 * (numFrames - 1));
 	var totalWidthInches = totalWidth / 25.4;
-	changeDivStr("totalWidth", totalWidth + "mm | " + getFootString(totalWidthInches));
+	changeDivStr("totalWidth", getFootString(totalWidthInches) + " | " + totalWidth + "mm" );
+	updateVisuals();
+}
+
+function updateVisuals()
+{
+	var numDoors = document.getElementById("numDoors").selectedIndex + 1;
+	for(i = 0; i < numDoors; i++)
+	{
+	    var div = document.createElement("div");
+		var img = document.createElement("img");
+		img.src = "door.jpg";
+		div.appendchild(img);
+		var el = document.getElementById("visualSetup");
+		el.appendChild(th);
+	}
 }
 
 </script>

@@ -81,8 +81,8 @@ body{ margin:0px; }
 	  </div>
 	</th>
   </table>
-  <div id="visualSetup">
-  </div>
+  <table style="width:20%" border="1" id="visualSetup">
+  </table>
 </div>
 <script>
 
@@ -246,17 +246,83 @@ function doorWidthChanged()
 	updateVisuals();
 }
 
+function addDoor()
+{
+	var table = document.getElementById("visualSetup");
+	var col = document.createElement("th");
+	col.align = "left";
+	var image = document.createElement("img");
+	image.src = "door.jpg";
+	col.appendChild(image);
+	table.appendChild(col);
+}
+
+function addFrame()
+{
+	var table = document.getElementById("visualSetup");
+	var col = document.createElement("th");
+	col.align = "left";
+	var image = document.createElement("img");
+	image.src = "frame.jpg";
+	col.appendChild(image);
+	table.appendChild(col);
+}
+
+function getPosition(string, subString, index) {
+   return string.split(subString, index).join(subString).length;
+}
+
 function updateVisuals()
 {
 	var numDoors = document.getElementById("numDoors").selectedIndex + 1;
-	for(i = 0; i < numDoors; i++)
+	var table = document.getElementById("visualSetup");
+	while(table.hasChildNodes())
 	{
-	    var div = document.createElement("div");
-		var img = document.createElement("img");
-		img.src = "door.jpg";
-		div.appendchild(img);
-		var el = document.getElementById("visualSetup");
-		el.appendChild(th);
+		table.removeChild(table.firstChild);
+	}
+	
+	var i = document.getElementById("numDoors").selectedIndex;
+	var j = document.getElementById("frameConfig").selectedIndex;
+	var numFrames = DoorInfo[i][1][j][0];
+	var frameString1 = DoorInfo[i][1][j][1];
+	var frameString2 = DoorInfo[i][1][j][2];
+	
+	addFrame();
+	var frmIdx1 = 0;
+	var frmIdx2 = 0;
+	for(frm = 0; frm < numFrames; frm++)
+	{
+		var doorsInFrame = numDoors;
+		if(frameString2[0] != 'F')
+		{
+			if(frm == 0)
+			{
+				frmIdx2 = frameString1.indexOf(",");
+				valStr = frameString1.substring(0, frmIdx2);
+				doorsInFrame = parseInt(valStr);
+				frmIdx1 = frmIdx2 + 1;
+			}
+			else if(frm < numFrames - 1)
+			{
+				frmIdx2 = getPosition(frameString1, ",", frm + 1);
+				console.log(frmIdx1);
+				console.log(frmIdx2);
+				valStr = frameString1.substring(frmIdx1, frmIdx2);
+				console.log(valStr);
+				doorsInFrame = parseInt(valStr);
+				frmIdx1 = frmIdx2 + 1;
+			}
+			else
+			{
+				valStr = frameString1.substring(frmIdx1, frmIdx1 + 1);
+				doorsInFrame = parseInt(valStr);
+			}
+		}
+		for(dr = 0; dr < doorsInFrame; dr++)
+		{
+			addDoor();
+		}
+		addFrame();
 	}
 }
 

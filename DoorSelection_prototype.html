@@ -81,7 +81,7 @@ body{ margin:0px; }
 	  </div>
 	</th>
   </table>
-  <table style="width:20%" border="1" id="visualSetup">
+  <table border="1" id="visualSetup">
   </table>
 </div>
 <script>
@@ -140,6 +140,7 @@ var DoorInfo = [
 		[6, "4,4,4,4,4,4", "L/C/C/C/C/R"]]],
 ];
 
+var visualWidth;
 
 var NumDoorsArray = [];
 
@@ -254,18 +255,32 @@ function addDoor()
 	var image = document.createElement("img");
 	image.src = "door.jpg";
 	col.appendChild(image);
-	table.appendChild(col);
+	table.appendChild(image);
+	visualWidth += 202;
 }
 
-function addFrame()
+function addLeftFrame()
 {
 	var table = document.getElementById("visualSetup");
 	var col = document.createElement("th");
 	col.align = "left";
 	var image = document.createElement("img");
-	image.src = "frame.jpg";
+	image.src = "leftframe.jpg";
 	col.appendChild(image);
-	table.appendChild(col);
+	table.appendChild(image);
+	visualWidth += 8;
+}
+
+function addRightFrame()
+{
+	var table = document.getElementById("visualSetup");
+	var col = document.createElement("th");
+	col.align = "left";
+	var image = document.createElement("img");
+	image.src = "rightframe.jpg";
+	col.appendChild(image);
+	table.appendChild(image);
+	visualWidth += 8;
 }
 
 function getPosition(string, subString, index) {
@@ -287,9 +302,11 @@ function updateVisuals()
 	var frameString1 = DoorInfo[i][1][j][1];
 	var frameString2 = DoorInfo[i][1][j][2];
 	
-	addFrame();
+	
 	var frmIdx1 = 0;
 	var frmIdx2 = 0;
+	visualWidth = 10;
+	addLeftFrame();
 	for(frm = 0; frm < numFrames; frm++)
 	{
 		var doorsInFrame = numDoors;
@@ -322,8 +339,13 @@ function updateVisuals()
 		{
 			addDoor();
 		}
-		addFrame();
+		addRightFrame();
+		if(frm < numFrames - 1)
+		{
+			addLeftFrame();
+		}
 	}
+	table.width = visualWidth.toString() + "px";
 }
 
 </script>

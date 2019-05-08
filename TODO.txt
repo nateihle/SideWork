@@ -1,0 +1,8 @@
+Nate 
+- Get fraction inches working
+- get resize finished
+- Turn Door to Frame dropdown to text if only 1 element
+- Find out how to apply CSS to whole table
+Alfredo
+- get images
+- get text style

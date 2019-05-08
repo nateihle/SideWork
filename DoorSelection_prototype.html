@@ -247,35 +247,59 @@ function doorWidthChanged()
 	updateVisuals();
 }
 
+var scale;
+
 function addDoor()
 {
 	var table = document.getElementById("visualSetup");
 	var image = document.createElement("img");
+	var width = 202 * (scale/100.0);
 	image.src = "door.jpg";
+	image.style.width = width.toString() + "px";
+	image.style.height = "auto";
 	table.appendChild(image);
-	visualWidth += 202;
+	visualWidth += width;
 }
 
 function addLeftFrame()
 {
 	var table = document.getElementById("visualSetup");
 	var image = document.createElement("img");
+	var width = 8 * (scale/100.0);
 	image.src = "leftframe.jpg";
+	image.style.width = width.toString() + "px";
+	image.style.height = "auto";
 	table.appendChild(image);
-	visualWidth += 8;
+	visualWidth += width;
 }
 
 function addRightFrame()
 {
 	var table = document.getElementById("visualSetup");
 	var image = document.createElement("img");
+	var width = 8 * (scale/100.0);
 	image.src = "rightframe.jpg";
+	image.style.width = width.toString() + "px";
+	image.style.height = "auto";
 	table.appendChild(image);
-	visualWidth += 8;
+	visualWidth += width;
 }
 
 function getPosition(string, subString, index) {
    return string.split(subString, index).join(subString).length;
+}
+
+function calcScale() 
+{
+	var numDoors = document.getElementById("numDoors").selectedIndex + 1;
+	if(numDoors > 5)
+	{
+		scale = 100 - Math.sqrt(300*(numDoors - 5));
+	}
+	else
+	{
+		scale = 100;
+	}
 }
 
 function updateVisuals()
@@ -297,6 +321,7 @@ function updateVisuals()
 	var frmIdx1 = 0;
 	var frmIdx2 = 0;
 	visualWidth = 10;
+	calcScale();
 	addLeftFrame();
 	for(frm = 0; frm < numFrames; frm++)
 	{

@@ -8,43 +8,17 @@ body{ margin:0px; }
 #leftMenu {
 	width: 15%;
 	min-width: 150px;
+	}
+#table1 {
+	background-color: #595959;
+	color: white;
 }
-#leftMenu > details{
-    
-}
-#leftMenu > details > summary{
-	cursor:pointer;
-	background: #050505;
-	margin:6px;
-	padding:8px;
-}
-#leftMenu > details > summary:hover{
-	background: #EFEFEF;
-}
-#leftMenu > details > summary::-webkit-details-marker{
-	/*display: none;*/
-}
-#leftMenu > details > a{
-	display:block;
-	text-decoration: none;
-	color:#160077;
-	font-size:13px;
-	margin:3px 6px 3px 18px;
-	padding: 4px;
-	background: #EFEFEF;
-}
-#leftMenu > details > a:hover{
-	background: #DFEFFF;
-	font-weight: bold;
-}
-#leftMenu > details > a:before{
-	content: "- ";
-}
+
 </style>
 </head>
 <body onload="main()">
 <div id="leftMenu">
-  <table style="width:400%" border="1">
+  <table id="table1" style="width:400%;" border="1">
 	<th>
 	  <p>Number of Doors</p>
 	  <select id="numDoors" onchange="numDoorsChanged()">
@@ -77,7 +51,7 @@ body{ margin:0px; }
 	</th>
 	<th>
 		<p>Net Opening</p>
-	  <div style="background-color:#9ACD32" id="totalWidth">
+	  <div style="color:#9ACD32" id="totalWidth">
 	  </div>
 	</th>
   </table>

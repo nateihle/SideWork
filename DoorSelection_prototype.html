@@ -60,8 +60,25 @@ body{ margin:0px; }
 	  </div>
 	</th>
   </table>
-  <canvas border="1" id="visualSetup">
-  </canvas>
+  <div>
+  </div>
+  <table border="1" id="visualSetup">
+  </table>
+  <img src="brown_leftframe.jpg" style = "display: none;" />
+  <img src="brown_door.jpg" style = "display: none;" />
+  <img src="brown_rightframe.jpg" style = "display: none;" />
+  <img src="brown_middleframe.jpg" style = "display: none;" />
+  
+  <img src="black_leftframe.jpg" style = "display: none;" />
+  <img src="black_door.jpg" style = "display: none;" />
+  <img src="black_rightframe.jpg" style = "display: none;" />
+  <img src="black_middleframe.jpg" style = "display: none;" />
+  
+  <img src="silver_leftframe.jpg" style = "display: none;" />
+  <img src="silver_door.jpg" style = "display: none;" />
+  <img src="silver_rightframe.jpg" style = "display: none;" />
+  <img src="silver_middleframe.jpg" style = "display: none;" />
+  
 </div>
 <script>
 
@@ -179,34 +196,27 @@ function sleep(ms) {
 
 function preloadImages()
 {
-	for(i = 0; i < ImageRepoStrings.length; i++)
+	for(i = 0; i < 4; i++)
 	{
+		console.log("here");
 		ImageRepo[i] = new Image();
-		if(i == 0)
-		{
-			console.log(ImageRepo[0][i]);
-			ImageRepo[0].onload = function()
-			{
-				hasLoaded = true;
-			}
-		}
-		ImageRepo[i].src = ImageRepo[0][i];
-	}
-	while(hasLoaded == false)
-	{
-		sleep(1);
+		console.log(ImageRepoStrings[0][i]);
+		ImageRepo[i].src = ImageRepoStrings[0][i];
 	}
 }
 
 function main()
 {
-	//preloadImages();
 	populateDNArray();
 	populateDropDown("doorHeight", DoorHeightArray, 1);
 	populateDropDown("doorWidth", DoorWidthArray, 1);
 	populateDropDown("numDoors", NumDoorsArray, 1);
 	populateDropDown2("color", DoorColorArray);
 	numDoorsChanged();
+	for(i = 0; i < 100; i++)
+	{
+		updateVisuals();
+	}
 }
 
 function removeOptions(selectbox)
@@ -288,25 +298,15 @@ function doorWidthChanged()
 	updateVisuals();
 }
 
-var canvas = document.getElementById("visualSetup");
-canvas.width = 1100;
-canvas.height = 500;
-
 function addImage(filename)
 {
+	var table = document.getElementById("visualSetup");
 	var image = document.createElement("img");
-	var context = canvas.getContext('2d');
-	console.log(visualWidth);
-	if(visualWidth > 1100)
-	{
-		canvas.width = visualWidth + image.naturalWidth;
-	}
-	image.onload = function(){
-		context.drawImage(image, visualWidth, 0);
-		visualWidth += image.naturalWidth;
-		console.log(visualWidth);
-	};
 	image.src = filename;
+	image.style.width = (image.naturalWidth * (scale / 100.0)) + "px";
+	image.style.height = "auto";
+	table.appendChild(image);
+	visualWidth += (image.naturalWidth * (scale / 100.0));
 }
 
 function addDoor()
@@ -326,7 +326,7 @@ function addRightFrame()
 
 function addMiddleFrame()
 {
-	addImage(DoorColorArray[colorSelection] + "_middleframe.jpg", 10);
+	addImage(DoorColorArray[colorSelection] + "_middleframe.jpg");
 }
 
 function getPosition(string, subString, index) {
@@ -342,9 +342,32 @@ function scaleCanvas()
 	}
 }
 
+function calcScale() 
+{
+	var width;
+	var numDoors = document.getElementById("numDoors").selectedIndex + 1;
+	var i = document.getElementById("numDoors").selectedIndex;
+	var j = document.getElementById("frameConfig").selectedIndex;
+	var numFrames = DoorInfo[i][1][j][0];
+	width = (numDoors * 203) + ((numFrames - 1) * 10) + 28
+	if(width > 1100)
+	{
+		scale = (1100 / width) * 100.0;
+	}
+	else
+	{
+		scale = 100;
+	}
+}
+
 function updateVisuals()
 {
 	var numDoors = document.getElementById("numDoors").selectedIndex + 1;
+	var table = document.getElementById("visualSetup");
+	while(table.hasChildNodes())
+	{
+		table.removeChild(table.firstChild);
+	}
 	var i = document.getElementById("numDoors").selectedIndex;
 	var j = document.getElementById("frameConfig").selectedIndex;
 	var numFrames = DoorInfo[i][1][j][0];
@@ -352,11 +375,9 @@ function updateVisuals()
 	var frameString2 = DoorInfo[i][1][j][2];
 	var frmIdx1 = 0;
 	var frmIdx2 = 0;
-	var context = canvas.getContext('2d');
-	
-	context.globalAlpha = 1.0;
-	context.clearRect(0, 0, canvas.width, canvas.height);
-	visualWidth = 0;
+
+	visualWidth = 10;
+	calcScale();
 	addLeftFrame();
 	
 	for(frm = 0; frm < numFrames; frm++)
@@ -394,7 +415,7 @@ function updateVisuals()
 		}
 	}
 	addRightFrame();
-	scaleCanvas() ;
+	table.width = visualWidth.toString() + "px";
 }
 
 </script>

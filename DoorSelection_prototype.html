@@ -261,13 +261,21 @@ function frameTypeChanged()
 
 function getRemStr(rem)
 {
-	if(rem >= 0.8125) return "7/8";
-	else if(rem >= 0.6875) return "3/4";
-	else if(rem >= 0.5625) return "5/8";
-	else if(rem >= 0.4375) return "1/2";
-	else if(rem >= 0.3125) return "3/8";
-	else if(rem >= 0.1875) return "1/4";
-	else if(rem >= 0.0625) return "1/8";
+	if(rem >= 0.90625) return "15/16";
+	else if(rem >= 0.84375) return "7/8";
+	else if(rem >= 0.78125) return "13/16";
+	else if(rem >= 0.71875) return "3/4";
+	else if(rem >= 0.65625) return "11/16";
+	else if(rem >= 0.59375) return "5/8";
+	else if(rem >= 0.53125) return "9/16";
+	else if(rem >= 0.46875) return "1/2";
+	else if(rem >= 0.40625) return "7/16";
+	else if(rem >= 0.34375) return "3/8";
+	else if(rem >= 0.28125) return "5/16";
+	else if(rem >= 0.21875) return "1/4";
+	else if(rem >= 0.15625) return "3/16";
+	else if(rem >= 0.09375) return "1/8";
+	else if(rem >= 0.03125) return "1/16";
 	else return "";
 }
 
@@ -292,7 +300,8 @@ function doorWidthChanged()
 	var numFrames = DoorInfo[i][1][j][0];
 	var numDoors = i + 1;
 	var base = 568 + (k>0?81:0) + (k>1?51:0) + (k>2?38:0) + (k>3?67:0) + (k>4?74:0);
-	var totalWidth = (base * numDoors) + (35 * (numDoors + 1)) + (30 * (numFrames - 1));
+	var totalWidth = (base * numDoors) + (35.0 * (numDoors + 1)) + (30.0 * (numFrames - 1));
+	console.log(totalWidth);
 	var totalWidthInches = totalWidth / 25.4;
 	changeDivStr("totalWidth", getFootString(totalWidthInches) + " | " + totalWidth + "mm" );
 	updateVisuals();

@@ -54,10 +54,14 @@ body{ margin:0px; }
 	  <select id="color" onchange="colorChanged()">
 	  </select>
 	</th>
-	<th width="200px">
+	<th width="150px">
 		<p>Net Opening</p>
-	  <div style="color:#9ACD32" id="totalWidth">
+	  <div style="color:#9ACD32;display:inline-block" id="totalWidth">
 	  </div>
+	  <select style="display:inline-block" id="units" onchange="unitsChanged()">
+		<option vlaue="standard">Std</option>
+		<option value="metric">Met</option>
+	  </select>
 	</th>
   </table>
   <div>
@@ -84,9 +88,18 @@ body{ margin:0px; }
 </div>
 <script>
 
-var colorSelection = 0;
-var ImageRepo = new Array();
-var MasterWidth = 1100;
+var frameType = 
+{
+	left: 1,
+	right: 2,
+	middle: 3,
+	full: 4,
+}
+var unitsType = 
+{
+	metric: 1,
+	standard: 2,
+}
 
 var DoorColorArray = 
 ["gold",
@@ -154,6 +167,10 @@ var DoorInfo = [
 ];
 
 var visualWidth = 0;
+var colorSelection = 0;
+var ImageRepo = new Array();
+var MasterWidth = 1100;
+var Units = unitsType.standard;
 
 var NumDoorsArray = [];
 
@@ -188,23 +205,6 @@ function populateDNArray()
 	for(i=0; i<24; i++)
 	{
 		NumDoorsArray[NumDoorsArray.length] = [NumDoorsArray.length, (NumDoorsArray.length + 1).toString() + " Door" + (i>0?"s":"")];
-	}
-}
-
-var hasLoaded = false;
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function preloadImages()
-{
-	for(i = 0; i < 4; i++)
-	{
-		console.log("here");
-		ImageRepo[i] = new Image();
-		console.log(ImageRepoStrings[0][i]);
-		ImageRepo[i].src = ImageRepoStrings[0][i];
 	}
 }
 
@@ -263,7 +263,7 @@ function frameTypeChanged()
 	var j = document.getElementById("frameConfig").selectedIndex;
 	changeDivStr("numFrames", DoorInfo[i][1][j][0] + " Frame" + (DoorInfo[i][1][j][0] > 1 ? "s" : ""));
 	changeDivStr("frameString", DoorInfo[i][1][j][2]);
-	doorWidthChanged();
+	unitsChanged();
 }
 
 function getRemStr(rem)
@@ -301,14 +301,6 @@ function getFootString(inches)
 	return str;
 }
 
-var frameType = 
-{
-	left: 1,
-	right: 2,
-	middle: 3,
-	full: 4,
-}
-
 function calcFrameWidth(numDoors, type)
 {
 	var k = document.getElementById("doorWidth").selectedIndex;
@@ -327,7 +319,29 @@ function calcFrameWidth(numDoors, type)
 		total += 35;
 		break;
 	}
-	return total;
+	if(Units == unitsType.standard)
+	{
+		var totalInches = total / 25.4;
+		return getFootString(totalInches);
+	}
+	else
+	{
+		return total.toString()+" mm";
+	}
+}
+
+function unitsChanged()
+{
+	var unitsSel = document.getElementById("units").selectedIndex;
+	if(unitsSel == 0)
+	{
+		Units = unitsType.standard;
+	}
+	else
+	{
+		Units = unitsType.metric;
+	}
+	doorWidthChanged();
 }
 
 function doorWidthChanged()
@@ -340,7 +354,14 @@ function doorWidthChanged()
 	var base = 568 + (k>0?81:0) + (k>1?51:0) + (k>2?38:0) + (k>3?67:0) + (k>4?74:0);
 	var totalWidth = (base * numDoors) + (35.0 * (numDoors + 1)) + (30.0 * (numFrames - 1));
 	var totalWidthInches = totalWidth / 25.4;
-	changeDivStr("totalWidth", getFootString(totalWidthInches) + " | " + totalWidth + "mm" );
+	if(Units == unitsType.standard)
+	{
+		changeDivStr("totalWidth", getFootString(totalWidthInches));
+	}
+	else
+	{
+		changeDivStr("totalWidth", totalWidth + "mm" );
+	}
 	updateVisuals();
 }
 
@@ -462,9 +483,7 @@ function updateVisuals()
 		{
 			addDoor();
 		}
-		
-		
-		
+
 		if(frm < numFrames - 1)
 		{
 			if(frm == 0)
@@ -532,8 +551,7 @@ function updateWidthLines(x1, x2, widthNum)
 	context.fillStyle = '#000';
 	context.font = '12px sans-serif';
 	var textStart = ((x2 - x1) / 2) - 20 + x1;
-	console.log("text start: " + textStart);
-	context.fillText(widthNum+" mm", textStart, (3 * canvas.height) / 4);
+	context.fillText(widthNum, textStart, (3 * canvas.height) / 4);
 }
 
 </script>

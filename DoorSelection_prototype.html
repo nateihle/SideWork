@@ -294,13 +294,40 @@ function getFootString(inches)
 	var rem_str = getRemStr(rem_inches - Math.floor(rem_inches));
 	var inchesZero = (Math.floor(rem_inches)==0?1:0);
 	var remZero = (rem_str==""?1:0);
-	console.log("inchesZero: "+inchesZero);
-	console.log("remZero: "+remZero);
 	if(ft > 0)
 	{
 		str += ft + "'  " + (inchesZero?"":Math.floor(rem_inches).toString()) + ((!inchesZero && !remZero)?"-":"") + rem_str + "\"";
 	}
 	return str;
+}
+
+var frameType = 
+{
+	left: 1,
+	right: 2,
+	middle: 3,
+	full: 4,
+}
+
+function calcFrameWidth(numDoors, type)
+{
+	var k = document.getElementById("doorWidth").selectedIndex;
+	var base = 568 + (k>0?81:0) + (k>1?51:0) + (k>2?38:0) + (k>3?67:0) + (k>4?74:0);
+	var total = (numDoors * base) + (35 * numDoors);
+	switch(type)
+	{
+	case frameType.left:
+	case frameType.right:
+		total += 15 + 35.0/2;
+		break;
+	case frameType.mid:
+		total += 15 + 15;
+		break;
+	case frameType.full:
+		total += 35;
+		break;
+	}
+	return total;
 }
 
 function doorWidthChanged()
@@ -312,7 +339,6 @@ function doorWidthChanged()
 	var numDoors = i + 1;
 	var base = 568 + (k>0?81:0) + (k>1?51:0) + (k>2?38:0) + (k>3?67:0) + (k>4?74:0);
 	var totalWidth = (base * numDoors) + (35.0 * (numDoors + 1)) + (30.0 * (numFrames - 1));
-	console.log(totalWidth);
 	var totalWidthInches = totalWidth / 25.4;
 	changeDivStr("totalWidth", getFootString(totalWidthInches) + " | " + totalWidth + "mm" );
 	updateVisuals();
@@ -378,6 +404,10 @@ function calcScale()
 	{
 		scale = 100;
 	}
+	if(scale > 60)
+	{
+		scale = 60;
+	}
 }
 
 function updateVisuals()
@@ -405,6 +435,7 @@ function updateVisuals()
 	for(frm = 0; frm < numFrames; frm++)
 	{
 		var doorsInFrame = numDoors;
+		var frameWidth;
 		if(frameString2[0] != 'F')
 		{
 			if(frm == 0)
@@ -431,13 +462,38 @@ function updateVisuals()
 		{
 			addDoor();
 		}
-		var temp = visualWidth;
-		updateWidthLines(lastX, temp);
+		
+		
+		
 		if(frm < numFrames - 1)
 		{
+			if(frm == 0)
+			{
+				frameWidth = calcFrameWidth(doorsInFrame, frameType.left);
+			}
+			else
+			{
+				frameWidth = calcFrameWidth(doorsInFrame, frameType.mid);
+			}
+			var skew = 3 + Math.floor(100.0 / scale) - 1;
+			console.log("skew: "+skew);
+			updateWidthLines(lastX, visualWidth - skew, frameWidth);
+			lastX = visualWidth - skew;
 			addMiddleFrame();
 		}
-		lastX = visualWidth;
+		else
+		{
+			if(numFrames == 1)
+			{
+				frameWidth = calcFrameWidth(doorsInFrame, frameType.full);
+			}
+			else
+			{
+				frameWidth = calcFrameWidth(doorsInFrame, frameType.right);
+			}
+			updateWidthLines(lastX, visualWidth, frameWidth);
+			lastX = visualWidth;
+		}
 	}
 	addRightFrame();
 	table.width = visualWidth.toString() + "px";
@@ -447,16 +503,16 @@ function clearWidthLines()
 {
 	var canvas = document.getElementById("widthLines");
 	var context = canvas.getContext("2d");
-	canvas.width = MasterWidth;
+	canvas.width = MasterWidth + 100;
 	canvas.height = 50;
 	context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function updateWidthLines(x1, x2)
+function updateWidthLines(x1, x2, widthNum)
 {
 	var canvas = document.getElementById("widthLines");
 	var context = canvas.getContext("2d");
-	var padding = 5;
+	var padding = 3;
 	
 	context.beginPath();
 	context.moveTo(x1 + padding, canvas.height/2);
@@ -473,9 +529,11 @@ function updateWidthLines(x1, x2)
 	context.lineTo(x2 - padding, canvas.height/2 + 20);
 	context.stroke();
 	
-	//context.fillStyle = '#000';
-	//context.font = '20px sans-serif';
-	//context.fillText("Hello World!", canvas.width / 2, canvas.height / 2);
+	context.fillStyle = '#000';
+	context.font = '12px sans-serif';
+	var textStart = ((x2 - x1) / 2) - 20 + x1;
+	console.log("text start: " + textStart);
+	context.fillText(widthNum+" mm", textStart, (3 * canvas.height) / 4);
 }
 
 </script>

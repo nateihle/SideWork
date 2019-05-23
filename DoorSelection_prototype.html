@@ -494,7 +494,7 @@ function updateVisuals()
 			{
 				frameWidth = calcFrameWidth(doorsInFrame, frameType.mid);
 			}
-			var skew = 3 + Math.floor(100.0 / scale) - 1;
+			var skew = 4 + Math.floor(100.0 / scale);
 			console.log("skew: "+skew);
 			updateWidthLines(lastX, visualWidth - skew, frameWidth);
 			lastX = visualWidth - skew;
@@ -531,7 +531,10 @@ function updateWidthLines(x1, x2, widthNum)
 {
 	var canvas = document.getElementById("widthLines");
 	var context = canvas.getContext("2d");
-	var padding = 3;
+	var padding = 0;
+	
+	if(x1 == 0)
+		x1 = 3;
 	
 	context.beginPath();
 	context.moveTo(x1 + padding, canvas.height/2);

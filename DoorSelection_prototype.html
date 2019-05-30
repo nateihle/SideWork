@@ -70,20 +70,20 @@ body{ margin:0px; }
   </table>
   <canvas id="widthLines">
   </canvas>
-  <img src="gold_leftframe.jpg" style = "display: none;" />
+  <img src="gold_left.jpg" style = "display: none;" />
   <img src="gold_door.jpg" style = "display: none;" />
-  <img src="gold_rightframe.jpg" style = "display: none;" />
-  <img src="gold_middleframe.jpg" style = "display: none;" />
+  <img src="gold_right.jpg" style = "display: none;" />
+  <img src="gold_middle.jpg" style = "display: none;" />
   
-  <img src="black_leftframe.jpg" style = "display: none;" />
+  <img src="black_left.jpg" style = "display: none;" />
   <img src="black_door.jpg" style = "display: none;" />
-  <img src="black_rightframe.jpg" style = "display: none;" />
-  <img src="black_middleframe.jpg" style = "display: none;" />
+  <img src="black_right.jpg" style = "display: none;" />
+  <img src="black_middle.jpg" style = "display: none;" />
   
-  <img src="silver_leftframe.jpg" style = "display: none;" />
+  <img src="silver_left.jpg" style = "display: none;" />
   <img src="silver_door.jpg" style = "display: none;" />
-  <img src="silver_rightframe.jpg" style = "display: none;" />
-  <img src="silver_middleframe.jpg" style = "display: none;" />
+  <img src="silver_right.jpg" style = "display: none;" />
+  <img src="silver_middle.jpg" style = "display: none;" />
   
 </div>
 <script>
@@ -107,9 +107,9 @@ var DoorColorArray =
 "silver"];
 
 var ImageRepoStrings = [
-["brown_door.jpg", "brown_leftframe.jpg", "brown_rightframe.jpg", "brown_middleframe.jpg"],
-["black_door.jpg", "black_leftframe.jpg", "black_rightframe.jpg", "black_middleframe.jpg"],
-["silver_door.jpg", "silver_leftframe.jpg", "silver_rightframe.jpg", "silver_middleframe.jpg"]
+["brown_door.jpg", "brown_left.jpg", "brown_right.jpg", "brown_middle.jpg"],
+["black_door.jpg", "black_left.jpg", "black_right.jpg", "black_middle.jpg"],
+["silver_door.jpg", "silver_left.jpg", "silver_right.jpg", "silver_middle.jpg"]
 ];
 
 var DoorHeightArray = [
@@ -365,35 +365,46 @@ function doorWidthChanged()
 	updateVisuals();
 }
 
-function addImage(filename)
+var globalHeight = 0;
+
+function addImage(filename, isfirst)
 {
 	var table = document.getElementById("visualSetup");
 	var image = document.createElement("img");
 	image.src = filename;
-	image.style.width = (image.naturalWidth * (scale / 100.0)) + "px";
-	image.style.height = "auto";
+	if(isfirst == true)
+	{
+		image.style.width = (image.naturalWidth * (scale / 100.0)) + "px";
+		image.style.height = "auto";
+		globalHeight = image.style.height;
+	}
+	else
+	{
+		image.style.width = "auto";
+		image.style.height = (image.naturalHeight * (scale / 100.0)) + "px";
+	}
 	table.appendChild(image);
 	visualWidth += (image.naturalWidth * (scale / 100.0));
 }
 
 function addDoor()
 {
-	addImage(DoorColorArray[colorSelection] + "_door.jpg");
+	addImage(DoorColorArray[colorSelection] + "_door.jpg", false);
 }
 
 function addLeftFrame()
 {
-	addImage(DoorColorArray[colorSelection] + "_leftframe.jpg");
+	addImage(DoorColorArray[colorSelection] + "_left.jpg", true);
 }
 
 function addRightFrame()
 {
-	addImage(DoorColorArray[colorSelection] + "_rightframe.jpg");
+	addImage(DoorColorArray[colorSelection] + "_right.jpg", false);
 }
 
 function addMiddleFrame()
 {
-	addImage(DoorColorArray[colorSelection] + "_middleframe.jpg");
+	addImage(DoorColorArray[colorSelection] + "_middle.jpg", false);
 }
 
 function getPosition(string, subString, index) {
@@ -416,7 +427,7 @@ function calcScale()
 	var i = document.getElementById("numDoors").selectedIndex;
 	var j = document.getElementById("frameConfig").selectedIndex;
 	var numFrames = DoorInfo[i][1][j][0];
-	width = (numDoors * 203) + ((numFrames - 1) * 10) + 28
+	width = (numDoors * 201) + ((numFrames - 1) * 7) + 16
 	if(width > MasterWidth)
 	{
 		scale = (MasterWidth / width) * 100.0;
@@ -531,24 +542,37 @@ function updateWidthLines(x1, x2, widthNum)
 {
 	var canvas = document.getElementById("widthLines");
 	var context = canvas.getContext("2d");
-	var padding = 0;
+	var padding = 1;
+	var aW = 7;
+	var aH = 10
 	
 	if(x1 == 0)
 		x1 = 3;
 	
+	// line -----------
 	context.beginPath();
 	context.moveTo(x1 + padding, canvas.height/2);
 	context.lineTo(x2 - padding, canvas.height/2);
 	context.stroke();
 	
+	// left arrow <
 	context.beginPath();
-	context.moveTo(x1 + padding, canvas.height/2 - 20);
-	context.lineTo(x1 + padding, canvas.height/2 + 20);
+	context.moveTo(x1 + padding, 		canvas.height/2);
+	context.lineTo(x1 + padding + aW, 	canvas.height/2 + aH);
+	context.stroke();
+	context.beginPath();
+	context.moveTo(x1 + padding, 		canvas.height/2);
+	context.lineTo(x1 + padding + aW, 	canvas.height/2 - aH);
 	context.stroke();
 	
+	// right arrow >
 	context.beginPath();
-	context.moveTo(x2 - padding, canvas.height/2 - 20);
-	context.lineTo(x2 - padding, canvas.height/2 + 20);
+	context.moveTo(x2 - padding, 		canvas.height/2);
+	context.lineTo(x2 - padding - aW, 	canvas.height/2 + aH);
+	context.stroke();
+	context.beginPath();
+	context.moveTo(x2 - padding, 		canvas.height/2);
+	context.lineTo(x2 - padding - aW, 	canvas.height/2 - aH);
 	context.stroke();
 	
 	context.fillStyle = '#000';

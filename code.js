@@ -472,8 +472,9 @@ function updateWidthLines(x1, x2, widthNum)
 	var canvas = document.getElementById("widthLines");
 	var context = canvas.getContext("2d");
 	var padding = 1;
-	var aW = 7;
-	var aH = 10
+	var aW = 9;
+	var aH = 4;
+	var vH = 10;
 	
 	if(x1 == 0)
 		x1 = 3;
@@ -488,21 +489,31 @@ function updateWidthLines(x1, x2, widthNum)
 	context.beginPath();
 	context.moveTo(x1 + padding, 		canvas.height/2);
 	context.lineTo(x1 + padding + aW, 	canvas.height/2 + aH);
-	context.stroke();
-	context.beginPath();
-	context.moveTo(x1 + padding, 		canvas.height/2);
 	context.lineTo(x1 + padding + aW, 	canvas.height/2 - aH);
+	context.fill();
 	context.stroke();
+
 	
-	// right arrow >
+	// right arrow <
 	context.beginPath();
 	context.moveTo(x2 - padding, 		canvas.height/2);
 	context.lineTo(x2 - padding - aW, 	canvas.height/2 + aH);
-	context.stroke();
-	context.beginPath();
-	context.moveTo(x2 - padding, 		canvas.height/2);
 	context.lineTo(x2 - padding - aW, 	canvas.height/2 - aH);
+	context.fill();
 	context.stroke();
+
+	// left vertical line |
+	context.beginPath();
+	context.moveTo(x1, 		canvas.height/2 + vH);
+	context.lineTo(x1, 		canvas.height/2 - vH);
+	context.stroke();
+
+	// right vertical line |
+	context.beginPath();
+	context.moveTo(x2, 		canvas.height/2 + vH);
+	context.lineTo(x2, 		canvas.height/2 - vH);
+	context.stroke();
+
 	
 	context.fillStyle = '#000';
 	context.font = '12px sans-serif';

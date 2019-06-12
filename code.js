@@ -1,113 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Door Selection Net Openings</title>
-<style>
-body{ margin:0px; }
-#leftMenu {
-	width: 15%;
-	min-width: 150px;
-	}
-#table1 {
-	background-color: #595959;
-	color: white;
-}
-#table2 {
-	background-color: #9fdf9f;
-	color: white;
-}
-
-</style>
-</head>
-<body style="background-color:#e6e6e6" onload="main()">
-<table id="table1" border="1">
-    <th>
-        <p>Number of Doors</p>
-        <select id="numDoors" onchange="numDoorsChanged()">
-        </select>
-    </th>
-    <th>
-        <p>Number of Frames</p>
-        <div id="numFrames">
-        </div>
-    </th>
-    <th>
-        <p>Frame Configuration</p>
-        <select id="frameConfig" onchange="frameTypeChanged()">
-        </select>
-    </th>
-    <th>
-        <p>Frame Types</p>
-        <div id="frameString">
-        </div>
-    </th>
-    <th>
-        <p>Catalog Door Width</p>
-        <select id="doorWidth" onchange="doorWidthChanged()">
-        </select>
-    </th>
-    <th>
-        <p>Door Height</p>
-        <select id="doorHeight">
-        </select>
-    </th>
-    <th>
-        <p>Color</p>
-        <select id="color" onchange="colorChanged()">
-        </select>
-    </th>
-    <th width="150px">
-        <p>Net Opening</p>
-        <div style="color:#9ACD32;display:inline-block" id="totalWidth">
-        </div>
-        <select style="display:inline-block" id="units" onchange="unitsChanged()">
-            <option vlaue="standard">Std</option>
-            <option value="metric">Met</option>
-        </select>
-    </th>
-</table>
-<div>
-</div>
-<div height="500px" style="background-color:#e6e6e6;max-width:1100px;min-height:335px;">
-      <table border="0" id="visualSetup">
-      </table>
-      <canvas id="widthLines">
-      </canvas>
-</div>
-<table id="table2" width="1100px" border="1">
-    <th>
-        <p>Number of Doors</p>
-        <select id="numDoors2">
-        </select>
-    </th>
-    <th>
-        <p>Number of Frames</p>
-        <div id="numFrames2">
-        </div>
-    </th>
-    <th>
-        <p>Frame Configuration</p>
-        <select>
-        </select>
-    </th>
-</table>
-<img src="gold_left.jpg" style = "display: none;" />
-<img src="gold_door.jpg" style = "display: none;" />
-<img src="gold_right.jpg" style = "display: none;" />
-<img src="gold_middle.jpg" style = "display: none;" />
-
-<img src="black_left.jpg" style = "display: none;" />
-<img src="black_door.jpg" style = "display: none;" />
-<img src="black_right.jpg" style = "display: none;" />
-<img src="black_middle.jpg" style = "display: none;" />
-
-<img src="silver_left.jpg" style = "display: none;" />
-<img src="silver_door.jpg" style = "display: none;" />
-<img src="silver_right.jpg" style = "display: none;" />
-<img src="silver_middle.jpg" style = "display: none;" />
-</body>
-<script>
+//#############################################
+//#                                           #                          
+//#                  GLOBALS                  #
+//#                                           #
+//############################################# 
 
 var frameType = 
 {
@@ -234,6 +129,12 @@ function setTableWidth()
 	var table = document.getElementById("table1");
 	table.width = MasterWidth+"px";
 }
+
+//#############################################
+//#                                           #                          
+//#                  MAIN                     #
+//#                                           #
+//############################################# 
 
 function main()
 {
@@ -383,8 +284,15 @@ function doorWidthChanged()
 	{
 		changeDivStr("totalWidth", totalWidth + "mm" );
 	}
-	updateVisuals();
+    updateVisuals();
+    updateCost();
 }
+
+//#############################################
+//#                                           #                          
+//#                  VISUALS                  #
+//#                                           #
+//#############################################  
 
 var globalHeight = 0;
 
@@ -602,6 +510,13 @@ function updateWidthLines(x1, x2, widthNum)
 	context.fillText(widthNum, textStart, (3 * canvas.height) / 4);
 }
 
-</script>
-</body>
-</html>
+//#############################################
+//#                                           #                          
+//#                  COST                     #
+//#                                           #
+//############################################# 
+                                    
+function updateCost()
+{
+    changeDivStr("totalCost", 12.5348);
+}

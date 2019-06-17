@@ -144,6 +144,7 @@ function main()
 	populateDropDown("doorWidth", DoorWidthArray, 1);
 	populateDropDown("numDoors", NumDoorsArray, 1);
 	populateDropDown2("color", DoorColorArray);
+	pricingMain();
 	numDoorsChanged();
 	updateVisuals();
 }
@@ -472,7 +473,7 @@ function updateWidthLines(x1, x2, widthNum)
 	var canvas = document.getElementById("widthLines");
 	var context = canvas.getContext("2d");
 	var padding = 1;
-	var aW = 9;
+	var aW = 11;
 	var aH = 4;
 	var vH = 10;
 	
@@ -526,8 +527,124 @@ function updateWidthLines(x1, x2, widthNum)
 //#                  COST                     #
 //#                                           #
 //############################################# 
+
+var DoorCostArray = 
+[
+	[[1283, 1350, 1409, 1409],
+	[1399, 1464, 1556, 1556],
+	[1425, 1490, 1615, 1615]],
+
+	[[1448, 1518, 1553, 1553],
+	[1543, 1741, 1787, 1787],
+	[1587, 1733, 1835, 1835]],
+
+	[[1613, 1686, 1696, 1696],
+	[1687, 2018, 2018, 2018],
+	[1749, 1976, 2055, 2055]],
+]; 
+
+var ShelfDepthArray = [
+	[24, "24\" Deep"],
+	[26, "27\" Deep"],
+	[28, "36\" Deep"],
+];
+
+var AddlDepthCost = [
+	[0, 109, 359],
+	[0, 131, 431]
+];
+
+var OLEDLightingCost = [
+	[0, 162], 
+	[0, 186]
+];
+
+var FridgeTypeArray = 
+[
+	"Normal Temp",
+	"Normal Temp, High Humidity",
+	"Low Temp"
+];
+
+var LightingTypeArray = 
+[
+	"Normal",
+	"OP45 LED"
+];
+
+
+var ShelfNumArray = [];
+
+function pricingMain()
+{
+	populateShelfNumArray();
+	populateDropDown2("fridgeType", FridgeTypeArray);
+	populateDropDown("shelves", ShelfNumArray, 1);
+	populateDropDown("shelfDepth", ShelfDepthArray, 1);
+	populateDropDown2("lighting", LightingTypeArray, 1);
+}
+
+function populateFridgeCost()
+{
+    changeDivStr("totalCost", 12.5348);
+}
                                     
 function updateCost()
 {
-    changeDivStr("totalCost", 12.5348);
+	var totalCost = 0;
+	var t = document.getElementById("fridgeType").selectedIndex;
+	var d = document.getElementById("numDoors").selectedIndex + 1;
+	var w = document.getElementById("doorWidth").selectedIndex;
+	var h = document.getElementById("doorHeight").selectedIndex;
+	var s = document.getElementById("shelves").selectedIndex;
+	var sd = document.getElementById("shelfDepth").selectedIndex;
+	var l = document.getElementById("lighting").selectedIndex;
+
+	if(w > 3)
+		w = 3;
+
+	var addlDepthCost = AddlDepthCost[h>1?1:0][sd];
+	var lightingCost = OLEDLightingCost[h>0?1:0][l];
+
+	var costPerDoor = DoorCostArray[t][h][w];
+	var totalShelfCost = s * 60.83;
+	var totalAddonCost = totalShelfCost + (addlDepthCost + lightingCost) * d;
+	var totalBaseCost = (costPerDoor) * d;
+	totalCost = totalBaseCost + totalAddonCost;
+	changeDivStr("baseCost", "Base: $" + totalBaseCost.toFixed(2));
+	changeDivStr("addOnCost", "Addons: $" + totalAddonCost.toFixed(2));
+    changeDivStr("totalCost", "Total: $" + totalCost.toFixed(2));
+}
+
+function populateShelfNumArray()
+{
+	for(i=0; i<26; i++)
+	{
+		ShelfNumArray[ShelfNumArray.length] = [ShelfNumArray.length - 1, (ShelfNumArray.length).toString() + " Shel" + (i!=1?"ves":"f")];
+	}
+}
+
+function fridgeTypeChanged()
+{
+	updateCost();
+}
+
+function doorHeightChanged()
+{
+	updateCost();
+}
+
+function shelvesChanged()
+{
+	updateCost();
+}
+
+function shelfDepthChanged()
+{
+	updateCost();
+}
+
+function lightingChanged()
+{
+	updateCost();
 }

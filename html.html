@@ -45,7 +45,7 @@ body{ margin:0px; }
 		</th>
 		<th>
 			<p>Door Height</p>
-			<select id="doorHeight">
+			<select id="doorHeight" onchange="doorHeightChanged()">
 			</select>
 		</th>
 		<th>
@@ -71,29 +71,34 @@ body{ margin:0px; }
 		<canvas id="widthLines">
 		</canvas>
 	</div>
-	<table id="table2" width="500px" border="1">
+	<table id="table2" width="1100px" border="1">
+		<th>
+			<p>Fridge Type</p>
+			<select id="fridgeType" onchange="fridgeTypeChanged()">
+			</select>
+		</th>
 		<th>
 			<p>Shelves</p>
-			<select id="shelves">
+			<select id="shelves" onchange="shelvesChanged()">
 			</select>
 		</th>
 		<th>
 			<p>Depth</p>
-			<div id="shelfDepth">
-			</div>
+			<select id="shelfDepth" onchange="shelfDepthChanged()">
+			</select>
 		</th>
 		<th>
 			<p>Lighting</p>
-			<select id="lighting">
+			<select id="lighting" onchange="lightingChanged()">
 			</select>
 		</th>
 		<th>
 			<p>Cost</p>
-			<div id="totalCost">
+			<div id="baseCost" style="color:blue">
 			</div>
-			<div id="baseCost">
+			<div id="addOnCost" style="color:red">
 			</div>
-			<div id="addOnCost">
+			<div id="totalCost" style="color:black">
 			</div>
 		</th>
 	</table>

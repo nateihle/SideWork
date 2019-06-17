@@ -611,9 +611,9 @@ function updateCost()
 	var totalAddonCost = totalShelfCost + (addlDepthCost + lightingCost) * d;
 	var totalBaseCost = (costPerDoor) * d;
 	totalCost = totalBaseCost + totalAddonCost;
-	changeDivStr("baseCost", "Base: $" + totalBaseCost.toFixed(2));
-	changeDivStr("addOnCost", "Addons: $" + totalAddonCost.toFixed(2));
-    changeDivStr("totalCost", "Total: $" + totalCost.toFixed(2));
+	changeDivStr("baseCost", "Base: $ " + totalBaseCost.toFixed(2));
+	changeDivStr("addOnCost", "Addons: $ " + totalAddonCost.toFixed(2));
+    changeDivStr("totalCost", "Total: $ " + totalCost.toFixed(2));
 }
 
 function populateShelfNumArray()
